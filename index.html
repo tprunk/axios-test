@@ -1,0 +1,63 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Köztér teszt</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+</head>
+<body>
+    <div>
+        <label for="type_hrsz">HRSZ</label>
+        <input type="radio" name="type" id="type_hrsz" checked>
+        <label for="type_address">Cím</label>
+        <input type="radio" name="type" id="type_address">
+    </div>
+    <div>
+        <label for="hrsz">HRSZ</label>
+        <input id="hrsz" type="text">
+    </div>
+    <div>
+        <label for="kozterulet">Közterület</label>
+        <input type="text" id="kozterulet"> <br>
+        <label for="kozteruletJellege">Közterület jellege</label>
+        <input type="text" id="kozteruletJellege"> <br>
+        <label for="hazszam">Házszám</label>
+        <input type="text" id="hazszam"> <br>        
+    </div>   
+    <div>
+        <button id="getData" onclick="getData()">Betöltés</button>
+    </div>
+    <embed  id="page" type="text/html" style="width:100; height: 100%;">
+
+    </div>
+    <script>
+        let getAddress = function(){
+            let isHrsz = document.getElementById('type_hrsz').checked         
+        
+            return isHrsz ? {"hrsz": document.getElementById('hrsz').value} : {"cim": {
+                "kozterulet": document.getElementById('kozterulet').value,
+                "kozteruletJellege": document.getElementById('kozteruletJellege').value,
+                "hazszam" : document.getElementById('hazszam').value
+            }} 
+        }
+        let getData = async function (){
+            let sendData = getAddress();
+            let res = await axios.put('https://staging.budapestkozut.hu/kozter', sendData)
+            document.getElementById('page').innerHTML  = res.data
+
+            var win = window.open("", "Title", "toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=780,height=700,top=100,left=200)");
+            win.document.write(res.data)
+            win.document.close()
+        }
+
+        window.addEventListener('message', (event) => {
+            console.log(`Received message: ${event.data}`);
+        });
+
+
+    </script> 
+</body>
+</html>
