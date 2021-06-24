@@ -45,7 +45,7 @@
         }
         let getData = async function (){
             let sendData = getAddress();
-            let res = await axios.put('https://staging.budapestkozut.hu/kozter', sendData)
+            let res = await axios.get('https://staging.budapestkozut.hu/kozter', sendData)
             document.getElementById('page').innerHTML  = res.data
 
             var win = window.open("", "Title", "toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=780,height=700,top=100,left=200)");
